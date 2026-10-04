@@ -2,12 +2,31 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-HErhiTM4qM0bmD8IdjlsYPs/+OEU7RZewP5mNgwMsfU='; script-src-attr 'none'; style-src 'self' 'sha256-dombsCcCL2xzO3NpgE3MjBFqRcZbVoKili2xiurJ7A0='; style-src-attr 'none'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#FFF9F2">
-  <meta name="description" content="달달함, 식감, 풍미, 먹는 방식. 12개의 선택으로 16가지 베이커리 메뉴 중 오늘의 빵을 찾아보세요.">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="오늘은 어떤 빵과 만나게 될까요? 12개의 선택으로 오늘의 빵을 찾고, 다양한 맛과 함께 즐길 빵을 만나보세요.">
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="./assets/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" sizes="180x180">
+  <link rel="canonical" href="https://seoheejung.github.io/bread-today/">
   <meta property="og:title" content="오늘은 어떤 빵을 먹을까?">
   <meta property="og:description" content="12개의 선택으로 찾는 오늘의 빵 취향">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="오늘의 빵">
+  <meta property="og:url" content="https://seoheejung.github.io/bread-today/">
+  <meta property="og:image" content="https://seoheejung.github.io/bread-today/assets/images/social-preview.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="오늘은 어떤 빵을 먹을까? 서비스 제목과 귀여운 빵 캐릭터 모음">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="오늘은 어떤 빵을 먹을까?">
+  <meta name="twitter:description" content="12개의 선택으로 찾는 오늘의 빵 취향">
+  <meta name="twitter:image" content="https://seoheejung.github.io/bread-today/assets/images/social-preview.jpg">
+  <meta name="twitter:image:alt" content="오늘의 빵 캐릭터와 서비스 제목">
   <title>오늘은 어떤 빵을 먹을까?</title>
   <style>
     :root {
@@ -62,6 +81,8 @@
     .landing-footnote { margin-top: 32px; color: var(--secondary); font-size: 13px; }
     .site-footer { max-width: 976px; border-top: 1px solid var(--border); margin: 0 auto; padding: 24px 24px max(24px, env(safe-area-inset-bottom)); text-align: center; color: var(--secondary); font-size: 12px; }
     .site-footer span { color: var(--primary); }
+    .footer-home { display: inline-flex; align-items: center; min-height: 44px; color: var(--primary); text-decoration: none; }
+    .copyright { display: block; margin-top: 8px; }
     .question-screen { max-width: 640px; margin: 16px auto 0; }
     .progress-top { display: flex; align-items: center; justify-content: space-between; color: var(--secondary); font-size: 14px; margin-bottom: 12px; }
     .progress-top strong { color: var(--primary); font-weight: 600; }
@@ -244,7 +265,7 @@
     <section class="error-screen" id="error-screen" aria-labelledby="error-title" hidden><h1 id="error-title" tabindex="-1">결과를 찾을 수 없어요.</h1><p>링크를 확인하거나 새로운 빵 취향을 찾아보세요.</p><button class="primary" id="error-restart" type="button">처음으로</button></section>
     <noscript>빵 취향 테스트를 이용하려면 브라우저의 JavaScript를 켜주세요.</noscript>
   </main>
-  <footer class="site-footer"><span>오늘의 빵</span> &nbsp;·&nbsp; 작은 선택으로 더 맛있는 하루</footer>
+  <footer class="site-footer"><a class="footer-home" id="footer-home" href="./index.html">오늘의 빵</a> &nbsp;·&nbsp; 작은 선택으로 더 맛있는 하루<span class="copyright">© <span id="copyright-year">2026</span> 오늘의 빵</span></footer>
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
   <script src="./data/results.js"></script>
   <script>
@@ -268,10 +289,10 @@
     let toastTimeout;
     const byId = (id) => document.getElementById(id);
     const resultData = typeof BREAD_RESULTS === 'undefined' ? {} : BREAD_RESULTS;
-    const hasResult = (code) => Object.hasOwn(resultData, code);
+    const hasResult = (code) => typeof code === 'string' && /^[DS][MT][RL][FB]$/.test(code) && Object.hasOwn(resultData, code);
 
     function calculateResult(selectedAnswers) {
-      if (selectedAnswers.length !== QUESTIONS.length || QUESTIONS.some((q, i) => ![q.optionAValue, q.optionBValue].includes(selectedAnswers[i]))) return null;
+      if (!Array.isArray(selectedAnswers) || selectedAnswers.length !== QUESTIONS.length || QUESTIONS.some((q, i) => ![q.optionAValue, q.optionBValue].includes(selectedAnswers[i]))) return null;
       return ['taste', 'texture', 'flavor', 'composition'].map((axis) => {
         const axisQuestions = QUESTIONS.filter((q) => q.axis === axis);
         const firstValue = axisQuestions[0].optionAValue;
@@ -280,6 +301,7 @@
     }
 
     function showScreen(id, focusId) {
+      if (id === 'error-screen') document.title = '결과를 찾을 수 없어요 · 오늘의 빵';
       for (const screen of ['landing', 'question-screen', 'result-screen', 'error-screen']) byId(screen).hidden = screen !== id;
       byId('copy-fallback').hidden = true;
       byId('toast').textContent = '';
@@ -338,6 +360,7 @@
     }
 
     function chooseAnswer(option) {
+      if (!['A', 'B'].includes(option)) return;
       if (currentQuestion < 0 || currentQuestion >= QUESTIONS.length || !byId('result-screen').hidden) return;
       answers[currentQuestion] = QUESTIONS[currentQuestion][`option${option}Value`];
       advanceQuestion();
@@ -430,6 +453,7 @@
     function resultUrl() {
       if (!['https:', 'http:'].includes(location.protocol) || !hasResult(resultCode)) return null;
       const url = new URL(location.href);
+      url.search = '';
       url.searchParams.set('result', resultCode);
       url.hash = '';
       return url.href;
@@ -492,13 +516,19 @@
       if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       event.preventDefault(); showHome();
     });
+    byId('footer-home').addEventListener('click', (event) => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault(); showHome();
+    });
+    byId('copyright-year').textContent = new Date().getFullYear();
     document.querySelectorAll('figure img').forEach((image) => image.addEventListener('error', () => {
       image.hidden = true;
       image.parentElement.classList.add('image-missing');
     }));
     function loadFromUrl(focus = true) {
-      const code = new URL(location.href).searchParams.get('result');
-      if (code !== null) renderResult(code, focus);
+      const codes = new URL(location.href).searchParams.getAll('result');
+      if (codes.length > 1) { resultCode = null; showScreen('error-screen', focus ? 'error-title' : null); }
+      else if (codes.length === 1) renderResult(codes[0], focus);
       else showHome(focus);
     }
     window.addEventListener('popstate', () => loadFromUrl());

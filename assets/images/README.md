@@ -1,6 +1,14 @@
 # 이미지 제작 기록
 
-현재 이미지는 실사를 대체한 귀여운 2D 빵 캐릭터입니다. 메인 1장과 메뉴별 대표 이미지 16장을 내장 `image_gen` 도구로 각각 새로 생성했습니다. 아래 파일명의 이미지를 JPEG 품질 85로 저장했으며, 기존 생성 원본은 기본 생성 폴더에 보존했습니다. 서비스 실행 중에는 생성 도구나 AI API를 사용하지 않습니다.
+현재 이미지는 실사를 대체한 귀여운 2D 빵 캐릭터입니다. 메인 1장과 메뉴별 대표 이미지 16장을 내장 `image_gen` 도구로 각각 새로 생성했습니다. 이미지 압축 요청에 따라 생성 원본에서 메인 최대 폭 1280px·메뉴별 960×960px, JPEG 품질 82로 최적화했습니다. 기존 17장 합계 3,485,875바이트에서 1,989,598바이트로 약 43% 감소했습니다. 기존 생성 원본은 기본 생성 폴더에 보존했습니다. 서비스 실행 중에는 생성 도구나 AI API를 사용하지 않습니다.
+
+## 공유 썸네일
+
+`social-preview.jpg`: 1200×630px, JPEG 품질 82, 134,535바이트. 내장 `image_gen` 도구에서 메인 캐릭터 이미지를 참조해 생성한 정적 서비스 미리보기입니다. 결과별 동적 이미지가 아닙니다.
+
+```text
+Use case: ads-marketing. Asset type: static Open Graph social preview thumbnail for the Korean bakery quiz website '오늘은 어떤 빵을 먹을까?'. Edit the attached hero illustration into a polished very wide landscape composition, target 1200x630 (1.91:1). Preserve the exact cute hand-painted bread character family, cocoa brown outlines, warm golden colors and cream #FFF9F2 background. Place the original seven bread characters together across the lower half, fully visible including feet. Upper half: large beautifully legible bold dark cocoa Korean headline exactly '오늘은 어떤 빵을 먹을까?' on one or two centered lines. Smaller brown subtitle exactly '12개의 선택으로 찾는 오늘의 빵 취향'. The headline must be the primary text and have generous clear space, no text overlaps faces. Gentle friendly illustrated bakery mood. Keep all characters safely inside the central 85%, with top and bottom safe margins. No additional text, CTA, URLs, logos, photos, watermark or decorative clutter. Output an original coherent share card, not a browser screenshot.
+```
 
 ## 현재 캐릭터 이미지 프롬프트
 
